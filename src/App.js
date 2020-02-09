@@ -1,9 +1,23 @@
 import React, {useState, useCallback} from 'react';
+import styled from 'styled-components';
+
 import './App.css';
-import './materialize.min.css';
 import Person from "./Person/Person";
-import UserInput from "./UserInput/UserInput";
-import UserOutput from "./UserOutput/UserOutput";
+
+const StyleButton = styled.button`
+	background-color: ${props => props.alt ? 'red' : 'green'};
+	color: white;
+	font: inherit;
+	border: 1px solid blue;
+	padding: 8px;
+	cursor: pointer;
+	transition: all .3s;
+	
+	&:hover {
+		background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
+		color: black;
+	}
+`;
 
 const App = props => {
 	const [personsState, setPersonsState] = useState({
@@ -45,83 +59,81 @@ const App = props => {
 		});
 	}
 
+
+
 	const togglePersonsHandler = () => {
 		let isShow = personsState.showPersonsList;
+
 		setPersonsState({
 			persons: [...personsState.persons],
 			stringState: personsState.stringState,
 			showPersonsList: !isShow
 		});
-
 	}
 
+	const style = {
+		backgroundColor: "green",
+		color: 'white',
+		font: "inherit",
+		border: "1px solid blue",
+		padding: "8px",
+		cursor: "pointer",
+		":hover": {
+			backgroundColor: "lightgreen",
+			color: "black"
+		}
+	};
+
+	let classes = [];
+	let buttonClasses = "active";
+
+	if (personsState.persons.length <= 2)
+		classes.push('customRed');
+
+	if (personsState.persons.length <= 1)
+		classes.push('customBold');
+
+	// personsState.showPersonsList ? buttonClasses = "active"  : buttonClasses = "";
+
+	// if(personsState.showPersonsList) {
+	// 	style.backgroundColor = "red";
+	// 	style[":hover"] = {
+	// 		backgroundColor: "salmon",
+	// 			color: "black"
+	// 	}
+	// }
+
+// className="btn waves-effect waves-light"
+//
 	return (
-		<div className="App container">
-			<h1>Hello</h1>
-			<p>My app is works!</p>
-			<button
-				className="btn waves-effect waves-light"
-				onClick={togglePersonsHandler}>Toggle Persons</button>
-			{personsState.showPersonsList ?
-				<div className="person">
-					{personsState.persons && personsState.persons.map((person, index) => {
-						return <Person
-							click={() => deletePersonHandler(index)}
-							key={person.id}
-							name={person.name}
-							age={person.age}
-							changed={(event) => nameChangedHandler(event, person.id)}/>
-					})}
-				</div>
-				: null
-			}
-		</div>
+
+			<div className="App container">
+				<h1>Hello</h1>
+				<p className={classes.join(' ')}>My app is works!</p>
+				<StyleButton alt={personsState.showPersonsList} onClick={togglePersonsHandler}>Toggle Persons</StyleButton>
+
+				{personsState.showPersonsList
+					? <div>
+						{personsState.persons && personsState.persons.map((person, index) => {
+							return <Person
+								click={() => deletePersonHandler(index)}
+								key={person.id}
+								name={person.name}
+								age={person.age}
+								changed={(event) => nameChangedHandler(event, person.id)}/>
+
+						})}
+
+					</div>
+
+					: null
+				}
+			</div>
+
+
 	);
 }
 
 
 export default App;
 
-
-/*
- const [usersState, setUsersState] = useState({
-	    userName: "Maxim"
-
-    });
-
-    const userNameChangedHandler = (event) => {
-	    setUsersState({
-		    userName: event.target.value
-	    });
-    }
-    const style = {
-        backgroundColor: 'aqua',
-        font: 'inherit',
-        border: '1px solid #094032',
-        padding: '8px',
-        cursor: 'pointer'
-    };
-    return (
-        <div className="App container">
-	        <h1>Hello</h1>
-	        <UserInput
-		        changed={userNameChangedHandler}
-		        currentName={usersState.userName}
-	        />
-	        <UserOutput userName={usersState.userName} />
-	        <UserOutput userName={usersState.userName} />
-	        <UserOutput userName={usersState.userName} />
-        </div>
-        <Person name={personsState.persons[0].name}
-		age={personsState.persons[0].age}>My Hobbies: learn JS</Person>
-
-		<Person name={personsState.persons[1].name}
-		age={personsState.persons[1].age}
-		changed={(event) => nameChangedHandler(event)}
-		clickFunc={showNameSwitcher}
-        defVal={myVal}/>
-
-		<Person name={personsState.persons[2].name}
-		age={personsState.persons[2].age}/>
-    );
-*/
