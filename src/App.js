@@ -4,22 +4,9 @@ import styled from 'styled-components';
 import './App.css';
 import Person from "./Person/Person";
 
-const StyleButton = styled.button`
-	background-color: ${props => props.alt ? 'red' : 'green'};
-	color: white;
-	font: inherit;
-	border: 1px solid blue;
-	padding: 8px;
-	cursor: pointer;
-	transition: all .3s;
-	
-	&:hover {
-		background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
-		color: black;
-	}
-`;
 
 const App = props => {
+
 	const [personsState, setPersonsState] = useState({
 		persons: [
 			{id: 'usr1', name: "Vania", age: 25},
@@ -110,7 +97,7 @@ const App = props => {
 			<div className="App container">
 				<h1>Hello</h1>
 				<p className={classes.join(' ')}>My app is works!</p>
-				<StyleButton alt={personsState.showPersonsList} onClick={togglePersonsHandler}>Toggle Persons</StyleButton>
+				<button className="myButton" alt={personsState.showPersonsList} onClick={togglePersonsHandler}>Toggle Persons</button>
 
 				{personsState.showPersonsList
 					? <div>
