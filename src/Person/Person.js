@@ -1,5 +1,5 @@
 import React from 'react';
-import './Person.css';
+import classes from './Person.module.css';
 import styled from 'styled-components';
 
 const StyleDiv = styled.div`
@@ -10,21 +10,16 @@ const StyleDiv = styled.div`
 `;
 
 const Person = (props) => {
-    /*const style = {
-        '@media (min-width: 550px)': {
-            width: '450px'
-        }
-    };*/
+
 
     return (
-        //<div className="card blue-grey darken-1 ">
-        <StyleDiv>
-            <div>
+
+            <div className={classes.personWrap}>
                 <p onClick={props.click}>i'm {props.name} and i'm {props.age} years old!</p>
                 {props.children ? <p>{props.children}</p> : <p>Not hobbies</p>}
                 <input type="text" onChange={props.changed} value={props.name} />
             </div>
-        </StyleDiv>
+
     );
 }
 export default Person;

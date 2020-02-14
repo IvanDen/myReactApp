@@ -1,7 +1,7 @@
 import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 
-import './App.css';
+import classes from './App.module.css';
 import Person from "./Person/Person";
 
 
@@ -46,8 +46,6 @@ const App = props => {
 		});
 	}
 
-
-
 	const togglePersonsHandler = () => {
 		let isShow = personsState.showPersonsList;
 
@@ -58,46 +56,25 @@ const App = props => {
 		});
 	}
 
-	const style = {
-		backgroundColor: "green",
-		color: 'white',
-		font: "inherit",
-		border: "1px solid blue",
-		padding: "8px",
-		cursor: "pointer",
-		":hover": {
-			backgroundColor: "lightgreen",
-			color: "black"
-		}
-	};
-
-	let classes = [];
+	let assignedClasses = [];
 	let buttonClasses = "active";
 
 	if (personsState.persons.length <= 2)
-		classes.push('customRed');
+		assignedClasses.push(classes.customRed);
 
 	if (personsState.persons.length <= 1)
-		classes.push('customBold');
+		assignedClasses.push(classes.customBold);
 
-	// personsState.showPersonsList ? buttonClasses = "active"  : buttonClasses = "";
+	let btnClass = [classes.myButton];
+	personsState.showPersonsList ? btnClass.push(classes.customRed) : btnClass.filter(cl => cl === classes.customRed);//btnClass = [classes.myButton];
 
-	// if(personsState.showPersonsList) {
-	// 	style.backgroundColor = "red";
-	// 	style[":hover"] = {
-	// 		backgroundColor: "salmon",
-	// 			color: "black"
-	// 	}
-	// }
 
-// className="btn waves-effect waves-light"
-//
 	return (
 
-			<div className="App container">
+			<div className={`${classes.App} ${classes.container}`}>
 				<h1>Hello</h1>
-				<p className={classes.join(' ')}>My app is works!</p>
-				<button className="myButton" alt={personsState.showPersonsList} onClick={togglePersonsHandler}>Toggle Persons</button>
+				<p className={assignedClasses.join(' ')}>My app is works!</p>
+				<button className={btnClass.join(' ')} alt={personsState.showPersonsList} onClick={togglePersonsHandler}>Toggle Persons</button>
 
 				{personsState.showPersonsList
 					? <div>
@@ -116,7 +93,6 @@ const App = props => {
 					: null
 				}
 			</div>
-
 
 	);
 }
