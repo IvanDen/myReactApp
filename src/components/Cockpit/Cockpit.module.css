@@ -1,0 +1,7 @@
+.customRed {color: red;}
+.customBold {font-weight: bold;}
+.myButton { background-color: green; color: white; font: inherit; border: 1px solid blue; padding: 8px; cursor: pointer; transition: all .3s; }
+.myButton:hover { background-color: lightgreen; color: black; }
+
+.myButton.customRed { background-color: red;}
+.myButton.customRed:hover {background-color: salmon;}

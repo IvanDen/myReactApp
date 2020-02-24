@@ -2,7 +2,8 @@ import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 
 import classes from './App.module.css';
-import Person from "./Person/Person";
+import Persons from "../components/Persons/Persons";
+import Cockpit from "../components/Cockpit/Cockpit";
 
 
 const App = props => {
@@ -16,6 +17,7 @@ const App = props => {
 		stringState: "This is other state",
 		showPersonsList: true
 	});
+	
 	const deletePersonHandler = (personIndex) =>  {
 		const persons =[...personsState.persons];
 		persons.splice(personIndex, 1);
@@ -56,38 +58,24 @@ const App = props => {
 		});
 	}
 
-	let assignedClasses = [];
-	let buttonClasses = "active";
 
-	if (personsState.persons.length <= 2)
-		assignedClasses.push(classes.customRed);
-
-	if (personsState.persons.length <= 1)
-		assignedClasses.push(classes.customBold);
-
-	let btnClass = [classes.myButton];
-	personsState.showPersonsList ? btnClass.push(classes.customRed) : btnClass.filter(cl => cl === classes.customRed);//btnClass = [classes.myButton];
 
 
 	return (
 
 			<div className={`${classes.App} ${classes.container}`}>
-				<h1>Hello</h1>
-				<p className={assignedClasses.join(' ')}>My app is works!</p>
-				<button className={btnClass.join(' ')} alt={personsState.showPersonsList} onClick={togglePersonsHandler}>Toggle Persons</button>
-
+				<Cockpit
+					title={props.appTitle}
+					showPersonsList={personsState.showPersonsList}
+					persons={personsState.persons}
+					clicked={togglePersonsHandler}
+				/>
 				{personsState.showPersonsList
 					? <div>
-						{personsState.persons && personsState.persons.map((person, index) => {
-							return <Person
-								click={() => deletePersonHandler(index)}
-								key={person.id}
-								name={person.name}
-								age={person.age}
-								changed={(event) => nameChangedHandler(event, person.id)}/>
-
-						})}
-
+						<Persons
+							persons={personsState.persons}
+							clicked={deletePersonHandler}
+							changed={nameChangedHandler}/>
 					</div>
 
 					: null
