@@ -2,8 +2,13 @@ import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 
 import classes from './App.module.css';
+// import Persons from "../components/Persons/Persons";
 import Persons from "../components/Persons/Persons";
 import Cockpit from "../components/Cockpit/Cockpit";
+import Aux from "../hoc/Awux";
+import withClass from "../hoc/withClass";
+import AuthContext from "../context/auth-context";
+
 
 
 const App = props => {
@@ -15,7 +20,11 @@ const App = props => {
 			{id: 'usr3', name: "Dima", age: 30}
 		],
 		stringState: "This is other state",
-		showPersonsList: true
+		showPersonsList: true,
+		showCockpit: true,
+		changeCounter: 0,
+		authenticated: false
+
 	});
 	
 	const deletePersonHandler = (personIndex) =>  {
@@ -24,7 +33,8 @@ const App = props => {
 		setPersonsState({
 			persons: persons,
 			stringState: personsState.stringState,
-			showPersonsList: personsState.showPersonsList
+			showPersonsList: personsState.showPersonsList,
+			showCockpit: personsState.showCockpit
 		});
 	}
 
@@ -41,10 +51,12 @@ const App = props => {
 		const persons = [...personsState.persons];
 		persons[personIndex] = person;
 
-		setPersonsState({
-			persons: persons,
-			stringState: personsState.stringState,
-			showPersonsList: personsState.showPersonsList
+		setPersonsState((prevState, props) => {
+			return	{
+					...prevState,
+					persons: [...persons],
+					changeCounter: prevState.changeCounter + 1,
+				};
 		});
 	}
 
@@ -52,39 +64,55 @@ const App = props => {
 		let isShow = personsState.showPersonsList;
 
 		setPersonsState({
-			persons: [...personsState.persons],
-			stringState: personsState.stringState,
+			...personsState,
 			showPersonsList: !isShow
 		});
 	}
 
-
-
-
+	const loginHandler = () => {
+		setPersonsState({
+			...personsState,
+			authenticated: true
+		})
+	}
 	return (
-
-			<div className={`${classes.App} ${classes.container}`}>
-				<Cockpit
-					title={props.appTitle}
-					showPersonsList={personsState.showPersonsList}
-					persons={personsState.persons}
-					clicked={togglePersonsHandler}
-				/>
-				{personsState.showPersonsList
-					? <div>
-						<Persons
-							persons={personsState.persons}
-							clicked={deletePersonHandler}
-							changed={nameChangedHandler}/>
-					</div>
-
-					: null
+			<Aux classes={`${classes.App} ${classes.container}`}>
+				<button onClick={() => {
+					setPersonsState({
+					...personsState,
+					showCockpit: !personsState.showCockpit
+					})}
 				}
-			</div>
+				>Remove Cockpit</button>
+				<AuthContext.Provider value={{
+					authenticated: personsState.authenticated,
+					login: loginHandler
 
+				}}>
+					{personsState.showCockpit
+						? <Cockpit
+							title={props.appTitle}
+							showPersonsList={personsState.showPersonsList}
+							personsLength={personsState.persons.length}
+							clicked={togglePersonsHandler}
+						/>
+						: null}
+					{personsState.showPersonsList
+						? <div>
+							<Persons
+								persons={personsState.persons}
+								clicked={deletePersonHandler}
+								changed={nameChangedHandler}
+							/>
+						</div>
+
+						: null
+					}
+				</AuthContext.Provider>
+			</Aux>
 	);
 }
 
 
-export default App;
+export default withClass(App, classes.App, classes.container);
 

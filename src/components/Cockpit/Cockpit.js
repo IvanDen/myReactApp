@@ -1,15 +1,29 @@
-import React from 'react';
+import React, {useEffect, useRef, useContext} from 'react';
 import classes from "./Cockpit.module.css";
+import AuthContext from "../../context/auth-context";
+
 
 const Cockpit = (props) => {
+	const toggleBtnRef = useRef(null);
+	const authContext = useContext(AuthContext);
+
+
+	useEffect(() => {
+		console.log('[Cockpit.js] useEffect');
+		toggleBtnRef.current.click();
+		return () => {
+			// clearTimeout(timer);
+			console.log('[Cockpit.js] cleanup work in useEffect');
+		}
+	}, []);
 
 	let assignedClasses = [];
 	let buttonClasses = "active";
 
-	if (props.persons.length <= 2)
+	if (props.personsLength <= 2)
 		assignedClasses.push(classes.customRed);
 
-	if (props.persons.length <= 1)
+	if (props.personsLength <= 1)
 		assignedClasses.push(classes.customBold);
 
 	let btnClass = [classes.myButton];
@@ -19,9 +33,16 @@ const Cockpit = (props) => {
 		<div>
 			<h1>{props.title}</h1>
 			<p className={assignedClasses.join(' ')}>My app is works!</p>
-			<button className={btnClass.join(' ')}  onClick={props.clicked}>Toggle Persons</button>
+			<button
+				className={btnClass.join(' ')}
+				onClick={props.clicked}
+				ref={toggleBtnRef}
+			>
+				Toggle Persons
+			</button>
+			<button className={classes.myButton} onClick={authContext.login}>Log in</button>
 		</div>
 	)
 }
 
-export default Cockpit;
+export default React.memo(Cockpit);
